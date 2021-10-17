@@ -34,13 +34,18 @@ class TraineeController extends Controller
             $trainees = $function->trainees();
 
             return response()->json([
-                'status' => true,
-                'trainees' => $trainees
+                'status' => 'success',
+                'data' => [
+                    'type' => 'trainees',
+                    'attributes' => $trainees
+                ]
             ], 200);
+
         } catch (\Exception $error) {
             return response()->json([
-                'message' => 'Oops! Something went wrong .. . Verify your request and try again!',
-                'error' => $error->getMessage()
+                'status' => 'error',
+                'message' => $error->getMessage(),
+
             ], 400);
         }
     }
@@ -51,7 +56,9 @@ class TraineeController extends Controller
         try {
             if (Gate::denies('only-secretary')) {
                 return response()->json([
-                    'message' => 'Unathorized'
+                    'status' => 'fail',
+                    'message' => 'Unathorized',
+                    'data' => null
                 ], 401);
             }
 
@@ -66,7 +73,10 @@ class TraineeController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return response()->json($validator->errors(), 422);
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $validator->errors()
+                ], 422);
             }
 
 
@@ -114,14 +124,18 @@ class TraineeController extends Controller
             }
 
             return response()->json([
-                'status' => true,
+                'status' => 'success',
                 'message' => 'Trainee created successfully',
-                'trainer' => $user_saved,
+                'data' => [
+                    'type' => 'trainees',
+                    'attributes' => $user_saved
+                ]
             ], 200);
         } catch (\Exception $error) {
             return response()->json([
-                'message' => 'Oops! Something went wrong .. . Verify your request and try again!',
-                'error' => $error->getMessage()
+                'status' => 'error',
+                'message' => $error->getMessage(),
+
             ], 400);
         }
     }
@@ -141,7 +155,10 @@ class TraineeController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return response()->json($validator->errors(), 422);
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $validator->errors()
+                ], 422);
             }
 
             $user = [
@@ -165,7 +182,7 @@ class TraineeController extends Controller
 
             if (Gate::allows('only-secretary')) {
                 //reduce qty from any course where they applied for
-                $copy_courses = CourseTrainee::where('trainee_id',$trainee_update->id )->get();
+                $copy_courses = CourseTrainee::where('trainee_id', $trainee_update->id)->get();
                 foreach ($copy_courses as $item) {
                     $copy_course = Course::where('id', $item->course_id)->first();
                     $copy_course->trainee_qty = $copy_course->trainee_qty - 1;
@@ -182,7 +199,7 @@ class TraineeController extends Controller
                     if ($copy_course->completed != 1) {
                         $copy_course->trainee_qty = $copy_course->trainee_qty + 1;
                         $copy_course->save();
-                       
+
                         $course_trainee = [
                             'trainee_id' => $trainee_update->id,
                             'course_id' => $course,
@@ -193,14 +210,18 @@ class TraineeController extends Controller
             }
 
             return response()->json([
-                'status' => true,
+                'status' => 'success',
                 'message' => 'Trainee updated successfully',
-                'trainer' => $user_update,
+                'data' => [
+                    'type' => 'trainees',
+                    'attributes' => $user_update
+                ]
             ], 200);
         } catch (\Exception $error) {
             return response()->json([
-                'message' => 'Oops! Something went wrong .. . Verify your request and try again!',
-                'error' => $error->getMessage()
+                'status' => 'error',
+                'message' => $error->getMessage(),
+
             ], 400);
         }
     }
@@ -211,7 +232,9 @@ class TraineeController extends Controller
         try {
             if (Gate::denies('only-secretary-and-trainee')) {
                 return response()->json([
-                    'message' => 'Unathorized'
+                    'status' => 'fail',
+                    'message' => 'Unathorized',
+                    'data' => null
                 ], 401);
             }
 
@@ -219,23 +242,26 @@ class TraineeController extends Controller
 
             if (!$user) {
                 return response()->json([
-                    'status' => false,
+                    'status' => 'success',
                     'message' => 'Trainee not found!',
-                    'trainee' => []
-                ], 403);
+                    'data' => null
+                ], 404);
             }
 
             $function = new Trainee();
             $trainee = $function->trainee($id);
 
             return response()->json([
-                'status' => true,
-                'trainee' => $trainee,
+                'status' => 'success',
+                'data' => [
+                    'type' => 'trainees',
+                    'attributes' => $trainee
+                ]
             ], 200);
         } catch (\Exception $error) {
             return response()->json([
-                'message' => 'Oops! Something went wrong .. . Verify your request and try again!',
-                'error' => $error->getMessage()
+                'status' => 'error',
+                'message' => $error->getMessage(),
             ], 400);
         }
     }
@@ -245,7 +271,9 @@ class TraineeController extends Controller
         try {
             if (Gate::denies('only-secretary')) {
                 return response()->json([
-                    'message' => 'Unathorized'
+                    'status' => 'fail',
+                    'message' => 'Unathorized',
+                    'data' => null
                 ], 401);
             }
 
@@ -255,22 +283,24 @@ class TraineeController extends Controller
 
             if (!$trainee) {
                 return response()->json([
-                    'status' => false,
+                    'status' => 'success',
                     'message' => 'Trainee not found!',
-                    'Trainee' => []
-                ], 403);
+                    'data' => null
+                ], 404);
             }
 
             DB::table('users')->where('id', $id)->delete();
 
             return response()->json([
-                'status' => true,
+                'status' => 'success',
                 'message' => 'Trainee deleted successfully',
+                'data' => null
             ], 200);
         } catch (\Exception $error) {
             return response()->json([
-                'message' => 'Oops! Something went wrong .. . Verify your request and try again!',
-                'error' => $error->getMessage()
+                'status' => 'error',
+                'message' => $error->getMessage(),
+
             ], 400);
         }
     }

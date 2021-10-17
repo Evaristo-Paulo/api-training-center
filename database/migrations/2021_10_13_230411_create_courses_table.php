@@ -16,7 +16,6 @@ class CreateCoursesTable extends Migration
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->string('slug');
             $table->date('date_begin');
             $table->date('date_end');
             $table->integer('trainee_qty')->unsigned()->default(0);

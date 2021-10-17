@@ -21,13 +21,16 @@ class CourseController extends Controller
     {
         try {
             return response()->json([
-                'status' => true,
-                'courses' => Course::all()
+                'status' => 'success',
+                'data' => [
+                    'type' => 'courses',
+                    'attributes' => Course::all()
+                ]
             ], 200);
         } catch (\Exception $error) {
             return response()->json([
-                'message' => 'Oops! Something went wrong .. . Verify your request and try again!',
-                'error' => $error->getMessage()
+                'status' => 'error',
+                'message' => $error->getMessage(),
             ], 400);
         }
     }
@@ -37,7 +40,9 @@ class CourseController extends Controller
         try {
             if (Gate::denies('only-secretary')) {
                 return response()->json([
-                    'message' => 'Unathorized'
+                    'status' => 'fail',
+                    'message' => 'Unathorized',
+                    'data' => null
                 ], 401);
             }
             $validator = Validator::make($request->all(), [
@@ -49,12 +54,14 @@ class CourseController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return response()->json($validator->errors(), 422);
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $validator->errors()
+                ], 422);
             }
 
             $course = [
                 'name' => $request->input('name'),
-                'slug' => Str::slug($request->input('name')),
                 'date_begin' => $request->input('date_begin'),
                 'date_end' => $request->input('date_end'),
                 'price' => $request->input('price'),
@@ -64,14 +71,18 @@ class CourseController extends Controller
             $course_saved = Course::create($course);
 
             return response()->json([
-                'status' => true,
+                'status' => 'success',
                 'message' => 'Course created successfully',
-                'course' => $course_saved,
+                'data' => [
+                    'type' => 'courses',
+                    'attributes' => $course_saved
+                ]
             ], 200);
         } catch (\Exception $error) {
             return response()->json([
-                'message' => 'Oops! Something went wrong .. . Verify your request and try again!',
-                'error' => $error->getMessage()
+                'status' => 'error',
+                'message' => $error->getMessage(),
+
             ], 400);
         }
     }
@@ -81,7 +92,9 @@ class CourseController extends Controller
         try {
             if (Gate::denies('only-secretary')) {
                 return response()->json([
-                    'message' => 'Unathorized'
+                    'status' => 'fail',
+                    'message' => 'Unathorized',
+                    'data' => null
                 ], 401);
             }
             $validator = Validator::make($request->all(), [
@@ -93,12 +106,14 @@ class CourseController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return response()->json($validator->errors(), 422);
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $validator->errors()
+                ], 422);
             }
 
             $course = [
                 'name' => $request->input('name'),
-                'slug' => Str::slug($request->input('name')),
                 'date_begin' => $request->input('date_begin'),
                 'date_end' => $request->input('date_end'),
                 'price' => $request->input('price'),
@@ -108,40 +123,49 @@ class CourseController extends Controller
             $course_updated = DB::table('courses')->where('id', $id)->first();
 
             return response()->json([
-                'status' => true,
+                'status' => 'success',
                 'message' => 'Course updated successfully',
-                'course' => $course_updated
+                'data' => [
+                    'type' => 'courses',
+                    'attributes' => $course_updated
+                ]
             ], 200);
         } catch (\Exception $error) {
             return response()->json([
-                'message' => 'Oops! Something went wrong .. . Verify your request and try again!',
-                'error' => $error->getMessage()
+                'status' => 'error',
+                'message' => $error->getMessage(),
+
             ], 400);
         }
     }
 
-    
-    public function search_by_name($slug)
+
+    public function search_by_name(Request $request)
     {
         try {
-            $course = Course::find($id);
+            $query = $request->input('query');
+            $courses = Course::where('name', 'like', '%' . $query . '%')->get();
 
-            if (!$course) {
+            if (!count($courses)) {
                 return response()->json([
-                    'status' => false,
+                    'status' => 'fail',
                     'message' => 'Course not found!',
-                    'course' => []
-                ], 403);
+                    'data' => null
+                ], 404);
             }
 
             return response()->json([
-                'status' => true,
-                'course' => $course,
+                'status' => 'success',
+                'data' => [
+                    'type' => 'courses',
+                    'attributes' => $courses
+                ]
             ], 200);
         } catch (\Exception $error) {
             return response()->json([
-                'message' => 'Oops! Something went wrong .. . Verify your request and try again!',
-                'error' => $error->getMessage()
+                'status' => 'error',
+                'message' => $error->getMessage(),
+
             ], 400);
         }
     }
@@ -153,20 +177,24 @@ class CourseController extends Controller
 
             if (!$course) {
                 return response()->json([
-                    'status' => false,
+                    'status' => 'fail',
                     'message' => 'Course not found!',
-                    'course' => []
-                ], 403);
+                    'data' => null
+                ], 404);
             }
 
             return response()->json([
-                'status' => true,
-                'course' => $course,
+                'status' => 'success',
+                'data' => [
+                    'type' => 'courses',
+                    'attributes' => $course
+                ]
             ], 200);
         } catch (\Exception $error) {
             return response()->json([
-                'message' => 'Oops! Something went wrong .. . Verify your request and try again!',
-                'error' => $error->getMessage()
+                'status' => 'error',
+                'message' => $error->getMessage(),
+
             ], 400);
         }
     }
@@ -176,7 +204,9 @@ class CourseController extends Controller
         try {
             if (Gate::denies('only-secretary')) {
                 return response()->json([
-                    'message' => 'Unathorized'
+                    'status' => 'fail',
+                    'message' => 'Unathorized',
+                    'data' => null
                 ], 401);
             }
             $id = $request->input('id');
@@ -185,22 +215,25 @@ class CourseController extends Controller
 
             if (!$course) {
                 return response()->json([
-                    'status' => false,
+                    'status' => 'success',
                     'message' => 'Course not found!',
-                    'course' => []
-                ], 403);
+                    'data' => null
+                ], 404);
             }
+
 
             DB::table('courses')->where('id', $id)->delete();
 
             return response()->json([
-                'status' => true,
+                'status' => 'success',
                 'message' => 'Course deleted successfully',
+                'data' => null
             ], 200);
         } catch (\Exception $error) {
             return response()->json([
-                'message' => 'Oops! Something went wrong .. . Verify your request and try again!',
-                'error' => $error->getMessage()
+                'status' => 'error',
+                'message' => $error->getMessage(),
+
             ], 400);
         }
     }
@@ -210,7 +243,9 @@ class CourseController extends Controller
         try {
             if (Gate::denies('only-secretary')) {
                 return response()->json([
-                    'message' => 'Unathorized'
+                    'status' => 'fail',
+                    'message' => 'Unathorized',
+                    'data' => null
                 ], 401);
             }
             $id = $request->input('id');
@@ -218,10 +253,10 @@ class CourseController extends Controller
 
             if (!$course) {
                 return response()->json([
-                    'status' => false,
+                    'status' => 'fail',
                     'message' => 'Course not found!',
-                    'course' => []
-                ], 403);
+                    'data' => null
+                ], 404);
             }
 
             $course = [
@@ -232,14 +267,18 @@ class CourseController extends Controller
             $course_updated = DB::table('courses')->where('id', $id)->first();
 
             return response()->json([
-                'status' => true,
+                'status' => 'success',
                 'message' => 'Course completed successfully',
-                'course' => $course_updated
+                'data' => [
+                    'type' => 'courses',
+                    'attributes' => $course_updated
+                ]
             ], 200);
         } catch (\Exception $error) {
             return response()->json([
-                'message' => 'Oops! Something went wrong .. . Verify your request and try again!',
-                'error' => $error->getMessage()
+                'status' => 'error',
+                'message' => $error->getMessage(),
+
             ], 400);
         }
     }
@@ -249,7 +288,9 @@ class CourseController extends Controller
         try {
             if (Gate::denies('only-secretary')) {
                 return response()->json([
-                    'message' => 'Unathorized'
+                    'status' => 'fail',
+                    'message' => 'Unathorized',
+                    'data' => null
                 ], 401);
             }
             $id = $request->input('id');
@@ -257,10 +298,10 @@ class CourseController extends Controller
 
             if (!$course) {
                 return response()->json([
-                    'status' => false,
+                    'status' => 'fail',
                     'message' => 'Course not found!',
-                    'course' => []
-                ], 403);
+                    'data' => null
+                ], 404);
             }
 
             $course = [
@@ -271,14 +312,18 @@ class CourseController extends Controller
             $course_updated = DB::table('courses')->where('id', $id)->first();
 
             return response()->json([
-                'status' => true,
+                'status' => 'success',
                 'message' => 'Course available successfully',
-                'course' => $course_updated
+                'data' => [
+                    'type' => 'courses',
+                    'attributes' => $course_updated
+                ]
             ], 200);
         } catch (\Exception $error) {
             return response()->json([
-                'message' => 'Oops! Something went wrong .. . Verify your request and try again!',
-                'error' => $error->getMessage()
+                'status' => 'error',
+                'message' => $error->getMessage(),
+
             ], 400);
         }
     }

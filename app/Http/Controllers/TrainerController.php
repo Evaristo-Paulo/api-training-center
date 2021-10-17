@@ -26,7 +26,9 @@ class TrainerController extends Controller
         try {
             if (Gate::denies('only-secretary-and-trainer')) {
                 return response()->json([
-                    'message' => 'Unathorized'
+                    'status' => 'fail',
+                    'message' => 'Unathorized',
+                    'data' => null
                 ], 401);
             }
 
@@ -37,14 +39,20 @@ class TrainerController extends Controller
 
             $function = new Trainer();
             $trainers = $function->trainers();
+            
             return response()->json([
-                'status' => true,
-                'trainers' => $trainers
+                'status' => 'success',
+                'data' => [
+                    'type' => 'trainers',
+                    'attributes' => $trainers
+                ]
             ], 200);
+
         } catch (\Exception $error) {
             return response()->json([
-                'message' => 'Oops! Something went wrong .. . Verify your request and try again!',
-                'error' => $error->getMessage()
+                'status' => 'error',
+                'message' => $error->getMessage(),
+
             ], 400);
         }
     }
@@ -54,7 +62,9 @@ class TrainerController extends Controller
         try {
             if (Gate::denies('only-secretary')) {
                 return response()->json([
-                    'message' => 'Unathorized'
+                    'status' => 'fail',
+                    'message' => 'Unathorized',
+                    'data' => null
                 ], 401);
             }
 
@@ -69,7 +79,10 @@ class TrainerController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return response()->json($validator->errors(), 422);
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $validator->errors()
+                ], 422);
             }
 
 
@@ -109,16 +122,20 @@ class TrainerController extends Controller
                 CourseTrainer::create($course_trainer);
             }
 
-
             return response()->json([
-                'status' => true,
+                'status' => 'success',
                 'message' => 'Trainer created successfully',
-                'trainer' => $user_saved,
+                'data' => [
+                    'type' => 'trainers',
+                    'attributes' => $user_saved
+                ]
             ], 200);
+
         } catch (\Exception $error) {
             return response()->json([
-                'message' => 'Oops! Something went wrong .. . Verify your request and try again!',
-                'error' => $error->getMessage()
+                'status' => 'error',
+                'message' => $error->getMessage(),
+
             ], 400);
         }
     }
@@ -137,7 +154,10 @@ class TrainerController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return response()->json($validator->errors(), 422);
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $validator->errors()
+                ], 422);
             }
 
             $user = [
@@ -174,14 +194,18 @@ class TrainerController extends Controller
             }
 
             return response()->json([
-                'status' => true,
+                'status' => 'success',
                 'message' => 'Trainer updated successfully',
-                'trainer' => $user_update,
+                'data' => [
+                    'type' => 'trainers',
+                    'attributes' => $user_update
+                ]
             ], 200);
         } catch (\Exception $error) {
             return response()->json([
-                'message' => 'Oops! Something went wrong .. . Verify your request and try again!',
-                'error' => $error->getMessage()
+                'status' => 'error',
+                'message' => $error->getMessage(),
+
             ], 400);
         }
     }
@@ -191,7 +215,9 @@ class TrainerController extends Controller
         try {
             if (Gate::denies('only-secretary-and-trainer')) {
                 return response()->json([
-                    'message' => 'Unathorized'
+                    'status' => 'fail',
+                    'message' => 'Unathorized',
+                    'data' => null
                 ], 401);
             }
 
@@ -199,23 +225,28 @@ class TrainerController extends Controller
 
             if (!$user) {
                 return response()->json([
-                    'status' => false,
+                    'status' => 'success',
                     'message' => 'Trainer not found!',
-                    'trainer' => []
-                ], 403);
+                    'data' => null
+                ], 404);
             }
 
             $function = new Trainer();
             $trainer = $function->trainer($id);
 
             return response()->json([
-                'status' => true,
-                'trainer' => $trainer,
+                'status' => 'success',
+                'data' => [
+                    'type' => 'trainers',
+                    'attributes' => $trainer
+                ]
             ], 200);
+
         } catch (\Exception $error) {
             return response()->json([
-                'message' => 'Oops! Something went wrong .. . Verify your request and try again!',
-                'error' => $error->getMessage()
+                'status' => 'error',
+                'message' => $error->getMessage(),
+
             ], 400);
         }
     }
@@ -225,7 +256,9 @@ class TrainerController extends Controller
         try {
             if (Gate::denies('only-secretary')) {
                 return response()->json([
-                    'message' => 'Unathorized'
+                    'status' => 'fail',
+                    'message' => 'Unathorized',
+                    'data' => null
                 ], 401);
             }
 
@@ -235,22 +268,25 @@ class TrainerController extends Controller
 
             if (!$trainer) {
                 return response()->json([
-                    'status' => false,
+                    'status' => 'success',
                     'message' => 'Trainer not found!',
-                    'trainer' => []
-                ], 403);
+                    'data' => null
+                ], 404);
             }
 
             DB::table('users')->where('id', $id)->delete();
 
             return response()->json([
-                'status' => true,
+                'status' => 'success',
                 'message' => 'Trainer deleted successfully',
+                'data' => null
             ], 200);
+            
         } catch (\Exception $error) {
             return response()->json([
-                'message' => 'Oops! Something went wrong .. . Verify your request and try again!',
-                'error' => $error->getMessage()
+                'status' => 'error',
+                'message' => $error->getMessage(),
+
             ], 400);
         }
     }
