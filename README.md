@@ -72,10 +72,22 @@ PUT - http://localhost::8000/api/courses/1/update
     "description": "Curso de JAVA"
 }
 
-POST - http://localhost::8000/api/courses/reomve
+DELETE - http://localhost::8000/api/courses/remove
+{
+    "id": 1,
+}
 
 POST - http://localhost::8000/api/courses/completed
+{
+    "id": 1,
+}
 
 POST - http://localhost::8000/api/courses/incompleted
+{
+    "id": 1,
+}
 
 POST - http://localhost::8000/api/courses/search-by-name
+{
+    "query": "Java",
+}
