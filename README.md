@@ -67,7 +67,7 @@ All endpoints you need to know to start using training center API
 
 - Endpoint: http://localhost::8000/api/secretaries
 - Method: GET
-- Get list of trainers
+- Get list of secretaries
 <p></p>
 
 - Endpoint: http://localhost::8000/api/secretaries/store
