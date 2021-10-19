@@ -4,18 +4,16 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Models\Role;
-use App\Models\Course;
-use App\Models\Trainee;
 use App\Models\RoleUser;
+use App\Models\Secretary;
 use Illuminate\Http\Request;
-use App\Models\CourseTrainee;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-class TraineeController extends Controller
+class SecretaryController extends Controller
 {
     public function __construct()
     {
@@ -25,19 +23,30 @@ class TraineeController extends Controller
     public function list()
     {
         try {
-            if (Gate::allows('only-trainee')) {
-                $id = $this->guard()->user()->id;
-                return redirect()->route('trainees.show', $id);
+            if (Gate::denies('only-admin-and-secretary')) {
+                return response()->json([
+                    'status' => 'fail',
+                    'message' => 'Unathorized',
+                    'data' => null
+                ], 401);
             }
 
-            $function = new Trainee();
-            $trainees = $function->trainees();
+            if (Gate::allows('only-secretary')) {
+                $id = $this->guard()->user()->id;
+                return redirect()->route('secretaries.show', $id);
+            }
+
+            $secretaries = DB::table('secretaries')
+                ->join('users', 'users.id', '=', 'secretaries.user_id')
+                ->join('genders', 'genders.id', '=', 'users.gender_id')
+                ->select('users.id', 'users.name', 'genders.type as gender', 'users.email', 'users.phone', 'users.bi', 'users.address')
+                ->get();
 
             return response()->json([
                 'status' => 'success',
                 'data' => [
-                    'type' => 'trainees',
-                    'attributes' => $trainees
+                    'type' => 'secretaries',
+                    'attributes' => $secretaries
                 ]
             ], 200);
         } catch (\Exception $error) {
@@ -53,7 +62,7 @@ class TraineeController extends Controller
     public function store(Request $request)
     {
         try {
-            if (Gate::denies('only-secretary')) {
+            if (Gate::denies('only-admin')) {
                 return response()->json([
                     'status' => 'fail',
                     'message' => 'Unathorized',
@@ -67,7 +76,6 @@ class TraineeController extends Controller
                 'phone' => 'required',
                 'bi' => 'required|size:14',
                 'address' => 'required',
-                'courses' => 'required|array|min:1',
                 'gender' => 'required',
             ]);
 
@@ -89,46 +97,29 @@ class TraineeController extends Controller
                 'address' => $request->input('address'),
                 'password' => Hash::make('123456'),
                 'gender_id' => $request->input('gender'),
+
             ];
 
             $user_saved = User::create($user);
 
-            $trainee = [
+            $secretary = [
                 'user_id' => $user_saved->id,
             ];
 
-            $trainee_saved = Trainee::create($trainee);
+            Secretary::create($secretary);
 
             $role_user = [
                 'user_id' => $user_saved->id,
-                'role_id' => Role::where('type', 'trainee')->first()->id,
+                'role_id' => Role::where('type', 'secretary')->first()->id,
             ];
 
             RoleUser::create($role_user);
 
-            $courses = $request->input('courses');
-
-            foreach ($courses as $course) {
-                $copy_course = Course::find($course);
-
-                if ($copy_course->completed != 1) {
-                    $copy_course->trainee_qty = $copy_course->trainee_qty + 1;
-                    $copy_course->save();
-
-                    $course_trainee = [
-                        'trainee_id' => $trainee_saved->id,
-                        'course_id' => $course,
-                    ];
-
-                    CourseTrainee::create($course_trainee);
-                }
-            }
-
             return response()->json([
                 'status' => 'success',
-                'message' => 'Trainee created successfully',
+                'message' => 'Secretary created successfully',
                 'data' => [
-                    'type' => 'trainees',
+                    'type' => 'secretaries',
                     'attributes' => $user_saved
                 ]
             ], 200);
@@ -145,7 +136,7 @@ class TraineeController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            if (Gate::denies('only-secretary')) {
+            if (Gate::denies('only-admin')) {
                 return response()->json([
                     'status' => 'fail',
                     'message' => 'Unathorized',
@@ -158,7 +149,6 @@ class TraineeController extends Controller
                 'phone' => 'required',
                 'bi' => 'required|size:14',
                 'address' => 'required',
-                'courses' => 'required|array|min:1',
                 'gender' => 'required',
             ]);
 
@@ -178,53 +168,23 @@ class TraineeController extends Controller
                 'bi' => $request->input('bi'),
                 'address' => $request->input('address'),
                 'gender_id' => $request->input('gender'),
-
             ];
 
             DB::table('users')->where('id', $id)->update($user);
             $user_update = User::find($id);
 
-            $trainee = [
+            $secretary = [
                 'user_id' => $user_update->id,
             ];
 
-            DB::table('trainees')->where('user_id', $id)->update($trainee);
-            $trainee_update = Trainee::where('user_id', $id)->first();
-
-            if (Gate::allows('only-secretary')) {
-                //reduce qty from any course where they applied for
-                $copy_courses = CourseTrainee::where('trainee_id', $trainee_update->id)->get();
-                foreach ($copy_courses as $item) {
-                    $copy_course = Course::where('id', $item->course_id)->first();
-                    $copy_course->trainee_qty = $copy_course->trainee_qty - 1;
-                    $copy_course->save();
-                }
-
-                // Delete all courses teaching from this trainers firstly 
-                DB::table('course_trainees')->where('trainee_id', $trainee_update->id)->delete();
-                $courses = $request->input('courses');
-
-                foreach ($courses as $course) {
-                    $copy_course = Course::where('id', $course)->first();
-
-                    if ($copy_course->completed != 1) {
-                        $copy_course->trainee_qty = $copy_course->trainee_qty + 1;
-                        $copy_course->save();
-
-                        $course_trainee = [
-                            'trainee_id' => $trainee_update->id,
-                            'course_id' => $course,
-                        ];
-                        CourseTrainee::create($course_trainee);
-                    }
-                }
-            }
+            DB::table('secretaries')->where('user_id', $id)->update($secretary);
+            Secretary::where('user_id', $id)->first();
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Trainee updated successfully',
+                'message' => 'Secretary updated successfully',
                 'data' => [
-                    'type' => 'trainees',
+                    'type' => 'secretaries',
                     'attributes' => $user_update
                 ]
             ], 200);
@@ -241,7 +201,7 @@ class TraineeController extends Controller
     public function show($id)
     {
         try {
-            if (Gate::denies('only-secretary-and-trainee')) {
+            if (Gate::denies('only-admin-and-secretary')) {
                 return response()->json([
                     'status' => 'fail',
                     'message' => 'Unathorized',
@@ -254,19 +214,25 @@ class TraineeController extends Controller
             if (!$user) {
                 return response()->json([
                     'status' => 'success',
-                    'message' => 'Trainee not found!',
+                    'message' => 'Secretary not found!',
                     'data' => null
                 ], 404);
             }
 
-            $function = new Trainee();
-            $trainee = $function->trainee($id);
+            $secretary = DB::table('secretaries')
+                ->join('users', function ($join) use ($id) {
+                    $join->on('users.id', '=', 'secretaries.user_id')
+                        ->where([['users.id', '=', $id]]);
+                })
+                ->join('genders', 'genders.id', '=', 'users.gender_id')
+                ->select('users.id', 'users.name', 'genders.type as gender', 'users.email', 'users.phone', 'users.bi', 'users.address')
+                ->first();
 
             return response()->json([
                 'status' => 'success',
                 'data' => [
-                    'type' => 'trainees',
-                    'attributes' => $trainee
+                    'type' => 'secretaries',
+                    'attributes' => $secretary
                 ]
             ], 200);
         } catch (\Exception $error) {
@@ -280,7 +246,7 @@ class TraineeController extends Controller
     public function delete(Request $request)
     {
         try {
-            if (Gate::denies('only-secretary')) {
+            if (Gate::denies('only-admin')) {
                 return response()->json([
                     'status' => 'fail',
                     'message' => 'Unathorized',
@@ -290,12 +256,12 @@ class TraineeController extends Controller
 
             $id = $request->input('id');
 
-            $trainee =  Trainee::where('user_id', $id)->first();
+            $secretary =  Secretary::where('user_id', $id)->first();
 
-            if (!$trainee) {
+            if (!$secretary) {
                 return response()->json([
                     'status' => 'success',
-                    'message' => 'Trainee not found!',
+                    'message' => 'Secretary not found!',
                     'data' => null
                 ], 404);
             }
@@ -304,7 +270,7 @@ class TraineeController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Trainee deleted successfully',
+                'message' => 'Secretary deleted successfully',
                 'data' => null
             ], 200);
         } catch (\Exception $error) {

@@ -24,7 +24,7 @@ class Trainee extends Model
     {
         $data = DB::table('trainees')
             ->join('users', 'users.id', '=', 'trainees.user_id')
-            ->join('genders', 'genders.id', '=', 'trainees.gender_id')
+            ->join('genders', 'genders.id', '=', 'users.gender_id')
             ->select('users.*', 'trainees.id as trainee_id', 'genders.type as gender')
             ->get();
 
@@ -68,7 +68,7 @@ class Trainee extends Model
                 $join->on('users.id', '=', 'trainees.user_id')
                     ->where([['users.id', '=', $id]]);
             })
-            ->join('genders', 'genders.id', '=', 'trainees.gender_id')
+            ->join('genders', 'genders.id', '=', 'users.gender_id')
             ->select('users.*', 'trainees.id as trainee_id', 'genders.type as gender')
             ->first();
 

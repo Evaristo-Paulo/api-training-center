@@ -4,6 +4,7 @@ namespace App;
 
 use App\Models\Role;
 use App\Models\Gender;
+use App\Models\Secretary;
 use App\Models\Trainee;
 use App\Models\Trainer;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -42,6 +43,10 @@ class User extends Authenticatable implements JWTSubject
 
     public function trainer(){
         return $this->hasOne(Trainer::class);
+    }
+
+    public function secretary(){
+        return $this->hasOne(Secretary::class);
     }
 
     public function trainee(){

@@ -33,6 +33,14 @@ Route::prefix('auth')->name('auth.')->middleware('api')->group(function () {
     })->name('required');
 });
 
+Route::prefix('secretaries')->middleware('api')->name('secretaries.')->group(function () {
+    Route::get('/', 'SecretaryController@list')->name('list');
+    Route::post('/store', 'SecretaryController@store')->name('store');
+    Route::put('/{id}/update', 'SecretaryController@update')->name('update');
+    Route::get('/{id}/show', 'SecretaryController@show')->name('show');
+    Route::delete('/remove', 'SecretaryController@delete')->name('delete');
+});
+
 Route::prefix('courses')->middleware('api')->name('courses.')->group(function () {
     Route::get('/', 'CourseController@list')->name('list');
     Route::post('/store', 'CourseController@store')->name('store');

@@ -64,6 +64,51 @@ All endpoints you need to know to start using training center API
 - User logout
 <p></p>
 
+
+- Endpoint: http://localhost::8000/api/secretaries
+- Method: GET
+- Get list of trainers
+<p></p>
+
+- Endpoint: http://localhost::8000/api/secretaries/store
+- Method: POST
+- Request {
+    "name": "Daniel Canhamena",
+    "email": "danielcanhamena@gmail.com",
+    "phone": "999123456",
+    "bi": "12345678901234",
+    "address": "Cacuaco, Luanda",
+    "gender": 1,
+}
+- Store new secretary
+<p></p>
+
+- Endpoint: http://localhost::8000/api/secretaries/1/show
+- Method: GET
+- Get data from secretaries with id = 1
+<p></p>
+
+- Endpoint: http://localhost::8000/api/secretaries/1/update
+- Method: PUT
+- Request {
+    "name": "Daniel Canhamena",
+    "email": "danielcanhamena@gmail.com",
+    "phone": "999123456",
+    "bi": "12345678901234",
+    "address": "Cacuaco, Luanda",
+    "gender": 1,
+}
+- Update data from secretaries with id = 1
+<p></p>
+
+- Endpoint: http://localhost::8000/api/secretaries/remove
+- Method: DELETE
+- Request {
+    "id": 1,
+}
+- delete secretaries with id = 1
+<p></p>
+
 - Endpoint: http://localhost::8000/api/courses
 - Method: GET
 - Get list of courses
@@ -146,7 +191,7 @@ All endpoints you need to know to start using training center API
     "gender": 1,
     "courses": [2]
 }
-- Store new trainers
+- Store new trainer
 <p></p>
 
 - Endpoint: http://localhost::8000/api/trainers/1/show
@@ -192,7 +237,7 @@ All endpoints you need to know to start using training center API
     "gender": 1,
     "courses": [2]
 }
-- Store new trainees
+- Store new trainee
 <p></p>
 
 - Endpoint: http://localhost::8000/api/trainees/1/show

@@ -13,13 +13,8 @@ class RoleUserTableSeeder extends Seeder
     public function run()
     {
         RoleUser::create([
-            'role_id' => 2,
             'user_id' => 1,
-        ]);
-
-        RoleUser::create([
-            'role_id' => 4,
-            'user_id' => 2,
+            'role_id' => 1,
         ]);
     }
 }

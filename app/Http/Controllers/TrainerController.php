@@ -94,13 +94,13 @@ class TrainerController extends Controller
                 'bi' => $request->input('bi'),
                 'address' => $request->input('address'),
                 'password' => Hash::make('123456'),
+                'gender_id' => $request->input('gender'),
             ];
 
             $user_saved = User::create($user);
 
             $trainer = [
                 'user_id' => $user_saved->id,
-                'gender_id' => $request->input('gender'),
             ];
 
             $trainer_saved = Trainer::create($trainer);
@@ -143,6 +143,13 @@ class TrainerController extends Controller
     public function update(Request $request, $id)
     {
         try {
+            if (Gate::denies('only-secretary')) {
+                return response()->json([
+                    'status' => 'fail',
+                    'message' => 'Unathorized',
+                    'data' => null
+                ], 401);
+            }
             $validator = Validator::make($request->all(), [
                 'name' => 'required|between:3,100',
                 'email' => 'required|email',
@@ -168,6 +175,7 @@ class TrainerController extends Controller
                 'phone' => $request->input('phone'),
                 'bi' => $request->input('bi'),
                 'address' => $request->input('address'),
+                'gender_id' => $request->input('gender'),
             ];
 
             DB::table('users')->where('id', $id)->update($user);
@@ -175,7 +183,6 @@ class TrainerController extends Controller
 
             $trainer = [
                 'user_id' => $user_update->id,
-                'gender_id' => $request->input('gender'),
             ];
 
             DB::table('trainers')->where('user_id', $id)->update($trainer);

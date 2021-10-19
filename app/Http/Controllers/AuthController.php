@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -65,8 +66,18 @@ class AuthController extends Controller
     public function profile()
     {
         try {
+            $id = $this->guard()->user()->id;
+
+            $user = DB::table('users')
+                ->join('genders', function ($join) use ($id) {
+                    $join->on('users.gender_id', '=', 'genders.id')
+                        ->where([['users.id', '=', $id]]);
+                })
+                ->select('users.id','users.name','genders.type as gender', 'users.email','users.phone','users.bi','users.address')
+                ->first();
+
             return response()->json([
-                'user' => $this->guard()->user()
+                'user' => $user
             ], 200);
         } catch (\Exception $error) {
             return response()->json([

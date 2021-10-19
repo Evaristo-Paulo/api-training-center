@@ -21,6 +21,8 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('bi')->nullable();
             $table->text('address')->nullable();
+            $table->unsignedBigInteger('gender_id')->unsigned();
+            $table->foreign('gender_id')->references('id')->on('genders')->onDelete('cascade');
             $table->timestamps();
         });
     }

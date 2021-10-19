@@ -17,12 +17,7 @@ class UserTableSeeder extends Seeder
             'name' => 'Evaristo Paulo',
             'email' => 'evaripaulo@gmail.com',
             'password' => Hash::make('123456'),
-        ]);
-
-        User::create([
-            'name' => 'Etelvina Catenda',
-            'email' => 'etelvina@gmail.com',
-            'password' => Hash::make('123456'),
+            'gender_id' => 1,
         ]);
     }
 }
