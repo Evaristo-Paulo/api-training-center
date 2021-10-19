@@ -116,7 +116,7 @@ All endpoints you need to know to start using training center API
 
 - Endpoint: http://localhost::8000/api/courses/incompleted
 - Method: POST
-- {
+- Request {
     "id": 1,
 }
 - Course with id = 1 is available for new trainne again
@@ -176,64 +176,48 @@ All endpoints you need to know to start using training center API
 - delete trainers with id = 1
 <p></p>
 
-GET - http://localhost::8000/api/trainers
+- Endpoint: http://localhost::8000/api/trainees
+- Method: GET
+- Get list of trainees
+<p></p>
 
-POST - http://localhost::8000/api/trainers/store 
-{
-    "name": "Daniel Canhamena",
-    "email": "danielcanhamena@gmail.com",
+- Endpoint: http://localhost::8000/api/trainees/store
+- Method: POST
+- Request {
+    "name": "Maria Madalena",
+    "email": "mariamadalena@gmail.com",
     "phone": "999123456",
     "bi": "12345678901234",
     "address": "Cacuaco, Luanda",
     "gender": 1,
     "courses": [2]
 }
+- Store new trainees
+<p></p>
 
-GET - http://localhost::8000/api/trainers/1/show
+- Endpoint: http://localhost::8000/api/trainees/1/show
+- Method: GET
+- Get data from trainees with id = 1
+<p></p>
 
-PUT - http://localhost::8000/api/trainers/1/update
-{
-    "name": "Daniel Canhamena",
-    "email": "danielcanhamena@gmail.com",
+- Endpoint: http://localhost::8000/api/trainees/1/update
+- Method: PUT
+- Request {
+    "name": "Maria Madalena João",
+    "email": "mariamadalena@gmail.com",
     "phone": "999123456",
     "bi": "12345678901234",
     "address": "Cacuaco, Luanda",
     "gender": 1,
     "courses": [2]
 }
+- Update data from trainees with id = 1
+<p></p>
 
-DELETE - http://localhost::8000/api/trainers/remove
-{
+- Endpoint: http://localhost::8000/api/trainees/remove
+- Method: DELETE
+- Request {
     "id": 1,
 }
-
-GET - http://localhost::8000/api/trainees
-
-POST - http://localhost::8000/api/trainees/store 
-{
-    "name": "Daniel Canhamena",
-    "email": "danielcanhamena@gmail.com",
-    "phone": "999123456",
-    "bi": "12345678901234",
-    "address": "Cacuaco, Luanda",
-    "gender": 1,
-    "courses": [2]
-}
-
-GET - http://localhost::8000/api/trainees/1/show
-
-PUT - http://localhost::8000/api/trainees/1/update
-{
-    "name": "Daniel Canhamena",
-    "email": "danielcanhamena@gmail.com",
-    "phone": "999123456",
-    "bi": "12345678901234",
-    "address": "Cacuaco, Luanda",
-    "gender": 1,
-    "courses": [2]
-}
-
-DELETE - http://localhost::8000/api/trainees/remove
-{
-    "id": 1,
-}
+- delete trainees with id = 1
+<p></p>
