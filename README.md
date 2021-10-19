@@ -91,3 +91,33 @@ POST - http://localhost::8000/api/courses/search-by-name
 {
     "query": "Java",
 }
+
+GET - http://localhost::8000/api/trainers
+
+POST - http://localhost::8000/api/trainers/store 
+{
+    "name": "Daniel Canhamena",
+    "email": "danielcanhamena@gmail.com",
+    "phone": "999123456",
+    "bi": "12345678901234",
+    "address": "Cacuaco, Luanda",
+    "gender": 1,
+    "courses": [2]
+}
+
+GET - http://localhost::8000/api/trainers/1/show
+
+PUT - http://localhost::8000/api/trainers/1/update
+{
+    "name": "Daniel Canhamena",
+    "email": "danielcanhamena@gmail.com",
+    "phone": "999123456",
+    "bi": "12345678901234",
+    "address": "Cacuaco, Luanda",
+    "gender": 1,
+    "courses": [2]
+}
+DELETE - http://localhost::8000/api/trainers/remove
+{
+    "id": 1,
+}
