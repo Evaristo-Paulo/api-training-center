@@ -39,7 +39,7 @@ class TrainerController extends Controller
 
             $function = new Trainer();
             $trainers = $function->trainers();
-            
+
             return response()->json([
                 'status' => 'success',
                 'data' => [
@@ -47,7 +47,6 @@ class TrainerController extends Controller
                     'attributes' => $trainers
                 ]
             ], 200);
-
         } catch (\Exception $error) {
             return response()->json([
                 'status' => 'error',
@@ -80,9 +79,11 @@ class TrainerController extends Controller
 
             if ($validator->fails()) {
                 return response()->json([
-                    'status' => 'error',
-                    'message' => $validator->errors()
-                ], 422);
+                    'status' => 'fail',
+                    'data' => [
+                        $validator->errors()
+                    ]
+                ], 400);
             }
 
 
@@ -130,7 +131,6 @@ class TrainerController extends Controller
                     'attributes' => $user_saved
                 ]
             ], 200);
-
         } catch (\Exception $error) {
             return response()->json([
                 'status' => 'error',
@@ -155,9 +155,11 @@ class TrainerController extends Controller
 
             if ($validator->fails()) {
                 return response()->json([
-                    'status' => 'error',
-                    'message' => $validator->errors()
-                ], 422);
+                    'status' => 'fail',
+                    'data' => [
+                        $validator->errors()
+                    ]
+                ], 400);
             }
 
             $user = [
@@ -241,7 +243,6 @@ class TrainerController extends Controller
                     'attributes' => $trainer
                 ]
             ], 200);
-
         } catch (\Exception $error) {
             return response()->json([
                 'status' => 'error',
@@ -281,7 +282,6 @@ class TrainerController extends Controller
                 'message' => 'Trainer deleted successfully',
                 'data' => null
             ], 200);
-            
         } catch (\Exception $error) {
             return response()->json([
                 'status' => 'error',

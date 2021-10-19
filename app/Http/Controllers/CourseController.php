@@ -55,9 +55,11 @@ class CourseController extends Controller
 
             if ($validator->fails()) {
                 return response()->json([
-                    'status' => 'error',
-                    'message' => $validator->errors()
-                ], 422);
+                    'status' => 'fail',
+                    'data' => [
+                        $validator->errors()
+                    ]
+                ], 400);
             }
 
             $course = [
@@ -107,9 +109,11 @@ class CourseController extends Controller
 
             if ($validator->fails()) {
                 return response()->json([
-                    'status' => 'error',
-                    'message' => $validator->errors()
-                ], 422);
+                    'status' => 'fail',
+                    'data' => [
+                        $validator->errors()
+                    ]
+                ], 400);
             }
 
             $course = [

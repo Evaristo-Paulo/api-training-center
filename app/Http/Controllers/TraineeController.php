@@ -40,7 +40,6 @@ class TraineeController extends Controller
                     'attributes' => $trainees
                 ]
             ], 200);
-
         } catch (\Exception $error) {
             return response()->json([
                 'status' => 'error',
@@ -74,9 +73,11 @@ class TraineeController extends Controller
 
             if ($validator->fails()) {
                 return response()->json([
-                    'status' => 'error',
-                    'message' => $validator->errors()
-                ], 422);
+                    'status' => 'fail',
+                    'data' => [
+                        $validator->errors()
+                    ]
+                ], 400);
             }
 
 
@@ -156,9 +157,11 @@ class TraineeController extends Controller
 
             if ($validator->fails()) {
                 return response()->json([
-                    'status' => 'error',
-                    'message' => $validator->errors()
-                ], 422);
+                    'status' => 'fail',
+                    'data' => [
+                        $validator->errors()
+                    ]
+                ], 400);
             }
 
             $user = [
