@@ -19,7 +19,7 @@ php artisan migrate:fresh --seed
 
 ## Authentication
 
-<p>Authough you can have access of some services without authentication, most of the services you need to be autheticated firstly.</p>
+<p>Although you can have access of some services without authentication, most of the services you need to be autheticated firstly.</p>
 
 - Endpoint: http://localhost::8000/api/auth/login
 - Method: POST
