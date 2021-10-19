@@ -37,7 +37,7 @@ Training center is an API that users can access to consume and provide services 
 All endpoints you need to know to start using training center API
 
 - Endpoint: http://localhost::8000/
-- Method: POST
+- Method: GET
 - Get info about API
 <p></p>
 
@@ -81,36 +81,54 @@ All endpoints you need to know to start using training center API
 - Store new course
 <p></p>
 
-GET - http://localhost::8000/api/courses/1/show
+- Endpoint: http://localhost::8000/api/courses/1/show
+- Method: GET
+- Get data from course with id = 1
+<p></p>
 
-PUT - http://localhost::8000/api/courses/1/update
-{
-    "name": "JAVA",
+- Endpoint: http://localhost::8000/api/courses/1/update
+- Method: PUT
+- {
+    "name": "JAVA WEB",
     "date_begin": "2021/10/19",
     "date_end": "2021/10/30",
     "price": 12000,
-    "description": "Curso de JAVA"
+    "description": "Curso de JAVA WEB"
 }
+- Update data from course with id = 1
+<p></p>
 
-DELETE - http://localhost::8000/api/courses/remove
-{
+- Endpoint: http://localhost::8000/api/courses/remove
+- Method: DELETE
+- {
     "id": 1,
 }
+- delete course with id = 1
+<p></p>
 
-POST - http://localhost::8000/api/courses/completed
-{
+- Endpoint: http://localhost::8000/api/courses/completed
+- Method: POST
+- {
     "id": 1,
 }
+- Course with id = 1 is not available for new trainne anymore
+<p></p>
 
-POST - http://localhost::8000/api/courses/incompleted
-{
+- Endpoint: http://localhost::8000/api/courses/incompleted
+- Method: POST
+- {
     "id": 1,
 }
+- Course with id = 1 is available for new trainne again
+<p></p>
 
-POST - http://localhost::8000/api/courses/search-by-name
-{
-    "query": "Java",
+- Endpoint: http://localhost::8000/api/courses/search-by-name
+- Method: POST
+- {
+    "query": "java",
 }
+- Get all courses where we can find "java" word on it.
+<p></p>
 
 GET - http://localhost::8000/api/trainers
 
