@@ -71,7 +71,7 @@ All endpoints you need to know to start using training center API
 
 - Endpoint: http://localhost::8000/api/courses/store
 - Method: POST
-- {
+- Request {
     "name": "JAVA",
     "date_begin": "2021/10/19",
     "date_end": "2021/10/30",
@@ -88,7 +88,7 @@ All endpoints you need to know to start using training center API
 
 - Endpoint: http://localhost::8000/api/courses/1/update
 - Method: PUT
-- {
+- Request {
     "name": "JAVA WEB",
     "date_begin": "2021/10/19",
     "date_end": "2021/10/30",
@@ -100,7 +100,7 @@ All endpoints you need to know to start using training center API
 
 - Endpoint: http://localhost::8000/api/courses/remove
 - Method: DELETE
-- {
+- Request {
     "id": 1,
 }
 - delete course with id = 1
@@ -108,7 +108,7 @@ All endpoints you need to know to start using training center API
 
 - Endpoint: http://localhost::8000/api/courses/completed
 - Method: POST
-- {
+- Request {
     "id": 1,
 }
 - Course with id = 1 is not available for new trainne anymore
@@ -124,10 +124,56 @@ All endpoints you need to know to start using training center API
 
 - Endpoint: http://localhost::8000/api/courses/search-by-name
 - Method: POST
-- {
+- Request {
     "query": "java",
 }
 - Get all courses where we can find "java" word on it.
+<p></p>
+
+- Endpoint: http://localhost::8000/api/trainers
+- Method: GET
+- Get list of trainers
+<p></p>
+
+- Endpoint: http://localhost::8000/api/trainers/store
+- Method: POST
+- Request {
+    "name": "Daniel Canhamena",
+    "email": "danielcanhamena@gmail.com",
+    "phone": "999123456",
+    "bi": "12345678901234",
+    "address": "Cacuaco, Luanda",
+    "gender": 1,
+    "courses": [2]
+}
+- Store new trainers
+<p></p>
+
+- Endpoint: http://localhost::8000/api/trainers/1/show
+- Method: GET
+- Get data from trainers with id = 1
+<p></p>
+
+- Endpoint: http://localhost::8000/api/trainers/1/update
+- Method: PUT
+- Request {
+    "name": "Daniel Canhamena",
+    "email": "danielcanhamena@gmail.com",
+    "phone": "999123456",
+    "bi": "12345678901234",
+    "address": "Cacuaco, Luanda",
+    "gender": 1,
+    "courses": [2]
+}
+- Update data from trainers with id = 1
+<p></p>
+
+- Endpoint: http://localhost::8000/api/trainers/remove
+- Method: DELETE
+- Request {
+    "id": 1,
+}
+- delete trainers with id = 1
 <p></p>
 
 GET - http://localhost::8000/api/trainers
