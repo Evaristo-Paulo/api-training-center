@@ -7,6 +7,16 @@ Training center is an API that users can access to consume and provide services 
 - Trainees.
 - Managers (secretaries) - Authorized people who can have access to manage all critical information.
 
+## Getting start
+
+You need to run seed, so you can have access to admin user 
+
+php artisan migrate:fresh --seed
+
+- User: Evaristo Paulo
+- E-mail: evaripaulo@gmail.com
+- password: 123456
+
 ## Authentication
 
 <p>Authough you can have access of some services without authentication, most of the services you need to be autheticated firstly.</p>
