@@ -44,8 +44,38 @@ POST - http://localhost::8000/api/auth/login
     "password": "example"
 }
 
-GET - http://localhost::8000/api/auth/logout
-
 GET - http://localhost::8000/api/auth/profile
 
 POST - http://localhost::8000/api/auth/refresh
+
+GET - http://localhost::8000/api/auth/logout
+
+GET - http://localhost::8000/api/courses
+
+POST - http://localhost::8000/api/courses/store 
+{
+    "name": "JAVA",
+    "date_begin": "2021/10/19",
+    "date_end": "2021/10/30",
+    "price": 12000,
+    "description": "Curso de JAVA"
+}
+
+GET - http://localhost::8000/api/courses/1/show
+
+PUT - http://localhost::8000/api/courses/1/update
+{
+    "name": "JAVA",
+    "date_begin": "2021/10/19",
+    "date_end": "2021/10/30",
+    "price": 12000,
+    "description": "Curso de JAVA"
+}
+
+POST - http://localhost::8000/api/courses/reomve
+
+POST - http://localhost::8000/api/courses/completed
+
+POST - http://localhost::8000/api/courses/incompleted
+
+POST - http://localhost::8000/api/courses/search-by-name
