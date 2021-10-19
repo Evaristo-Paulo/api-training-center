@@ -36,6 +36,8 @@ Training center is an API that users can access to consume and provide services 
 
 All endpoints you need to know to start using training center API
 
+GET - http://localhost::8000/
+
 POST - http://localhost::8000/api/auth/login
 {
     "email": "example@gmail.com",
@@ -45,3 +47,5 @@ POST - http://localhost::8000/api/auth/login
 GET - http://localhost::8000/api/auth/logout
 
 GET - http://localhost::8000/api/auth/profile
+
+POST - http://localhost::8000/api/auth/refresh
