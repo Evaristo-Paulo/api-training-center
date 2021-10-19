@@ -36,8 +36,9 @@ Training center is an API that users can access to consume and provide services 
 
 All endpoints you need to know to start using training center API
 
-GET - http://localhost::8000/
-
+- Endpoint: http://localhost::8000/
+- Method: POST
+- Get info about API
 POST - http://localhost::8000/api/auth/login
 {
     "email": "example@gmail.com",
@@ -117,7 +118,39 @@ PUT - http://localhost::8000/api/trainers/1/update
     "gender": 1,
     "courses": [2]
 }
+
 DELETE - http://localhost::8000/api/trainers/remove
+{
+    "id": 1,
+}
+
+GET - http://localhost::8000/api/trainees
+
+POST - http://localhost::8000/api/trainees/store 
+{
+    "name": "Daniel Canhamena",
+    "email": "danielcanhamena@gmail.com",
+    "phone": "999123456",
+    "bi": "12345678901234",
+    "address": "Cacuaco, Luanda",
+    "gender": 1,
+    "courses": [2]
+}
+
+GET - http://localhost::8000/api/trainees/1/show
+
+PUT - http://localhost::8000/api/trainees/1/update
+{
+    "name": "Daniel Canhamena",
+    "email": "danielcanhamena@gmail.com",
+    "phone": "999123456",
+    "bi": "12345678901234",
+    "address": "Cacuaco, Luanda",
+    "gender": 1,
+    "courses": [2]
+}
+
+DELETE - http://localhost::8000/api/trainees/remove
 {
     "id": 1,
 }
