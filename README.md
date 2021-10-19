@@ -221,3 +221,34 @@ All endpoints you need to know to start using training center API
 }
 - delete trainees with id = 1
 <p></p>
+
+## DATA
+
+Here you can find some info about data and its value
+
+- Course 
+- name: Course name (required)
+- date_begin: date to begin this course (required) (YYYY/MM/DD)
+- date_end: date to end this course (required) (YYYY/MM/DD)
+- price: cost (required)
+- Description: Some info about this course (optional)
+<p></p>
+
+- Trainer 
+- name: Trainer full name (required)
+- email: email (required)
+- phone: phone (required)
+- bi: Identity Document (required)
+- address: address (required)
+- gender: gender id (required)
+- courses: course id (it can be array of courses id) (required)
+<p></p>
+
+- Trainee
+- name: Trainee full name (required)
+- email: email (required)
+- phone: phone (required)
+- bi: Identity Document (required)
+- address: address (required)
+- gender: gender id (required)
+- courses: course id (it can be array of courses id) (required)
