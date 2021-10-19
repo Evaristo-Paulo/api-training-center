@@ -12,6 +12,7 @@ Training center is an API that users can access to consume and provide services 
 <p>Authough you can have access of some services without authentication, most of the services you need to be autheticated firstly.</p>
 
 - Endpoint: http://localhost::8000/api/auth/login
+- Method: POST
 - Request
 
 {
@@ -34,4 +35,10 @@ Training center is an API that users can access to consume and provide services 
 ## Resourses
 
 All endpoints you need to know to start using training center API
-<p>http://api-training-center.test/api/auth/login</p>
+<p>POST - http://api-training-center.test/api/auth/login</p>
+{
+    "email": "example@gmail.com",
+    "password": "example"
+}
+
+<p>GET - http://api-training-center.test/api/auth/logout</p>
