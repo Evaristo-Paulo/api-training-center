@@ -7,7 +7,7 @@ Training center is an API that users can access to consume and provide services 
 - Trainees.
 - Managers (secretaries) - Authorized people who can have access to manage all critical information.
 
-## Getting start
+## Getting started
 
 You need to run seed, so you can have access to admin user 
 
