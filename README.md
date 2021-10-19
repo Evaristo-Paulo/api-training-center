@@ -47,24 +47,39 @@ All endpoints you need to know to start using training center API
     "email": "example@gmail.com",
     "password": "example"
 }
-- Login
+<p></p>
 
-GET - http://localhost::8000/api/auth/profile
+- Endpoint: http://localhost::8000/api/auth/profile
+- Method: GET
+- Get info from authenticated user
+<p></p>
 
-POST - http://localhost::8000/api/auth/refresh
+- Endpoint: http://localhost::8000/api/auth/refresh
+- Method: POST
+- Refresh token
+<p></p>
 
-GET - http://localhost::8000/api/auth/logout
+- Endpoint: http://localhost::8000/api/auth/logout
+- Method: GET
+- User logout
+<p></p>
 
-GET - http://localhost::8000/api/courses
+- Endpoint: http://localhost::8000/api/courses
+- Method: GET
+- Get list of courses
+<p></p>
 
-POST - http://localhost::8000/api/courses/store 
-{
+- Endpoint: http://localhost::8000/api/courses/store
+- Method: POST
+- {
     "name": "JAVA",
     "date_begin": "2021/10/19",
     "date_end": "2021/10/30",
     "price": 12000,
     "description": "Curso de JAVA"
 }
+- Store new course
+<p></p>
 
 GET - http://localhost::8000/api/courses/1/show
 
