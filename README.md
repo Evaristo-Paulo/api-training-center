@@ -39,11 +39,14 @@ All endpoints you need to know to start using training center API
 - Endpoint: http://localhost::8000/
 - Method: POST
 - Get info about API
-POST - http://localhost::8000/api/auth/login
-{
+
+- Endpoint: http://localhost::8000/api/auth/login
+- Method: POST
+- Request {
     "email": "example@gmail.com",
     "password": "example"
 }
+- Login
 
 GET - http://localhost::8000/api/auth/profile
 
