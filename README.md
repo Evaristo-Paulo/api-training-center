@@ -11,7 +11,7 @@ Training center is an API that users can access to consume and provide services 
 
 You need to run seed, so you can have access to admin user 
 
-php artisan migrate:fresh --seed
+Command: php artisan migrate:fresh --seed
 
 - User: Evaristo Paulo
 - E-mail: evaripaulo@gmail.com
